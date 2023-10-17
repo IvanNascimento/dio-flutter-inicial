@@ -5,7 +5,8 @@ import 'package:inicial/constants/colors.dart';
 import 'package:inicial/services/images.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final String _nome;
+  const Home(this._nome, {super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -40,7 +41,7 @@ class _HomeState extends State<Home> {
               ),
               const SizedBox(height: 25),
               Text(
-                "Bem Vindo, [nome]!",
+                "Bem Vindo, ${widget._nome}!",
                 style: TextStyle(color: TextColors.InvertedColor),
               ),
               const SizedBox(height: 75),

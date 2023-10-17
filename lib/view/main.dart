@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:inicial/constants/colors.dart';
+import 'package:inicial/view/cadastro.dart';
 import 'package:inicial/view/configuracoes.dart';
 import 'package:inicial/view/home.dart';
 import 'package:inicial/view/login.dart';
@@ -15,6 +17,22 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   PageController mainCtrl = PageController(initialPage: 0);
   int pagAtual = 0;
+
+  String? nome;
+
+  Future<void> _initVariables() async {
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+      nome = "Ivan Nascimento";
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _initVariables();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +100,12 @@ class _MainViewState extends State<MainView> {
               pagAtual = value;
             });
           },
-          children: const [Home(), Registros(), Configuracoes()],
+          children: [
+            Home(nome ?? "NomeUsuário"),
+            const Registros(),
+            const Configuracoes(),
+            const Cadastro()
+          ],
         )),
         BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
