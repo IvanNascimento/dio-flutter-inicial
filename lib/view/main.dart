@@ -33,7 +33,6 @@ class _MainViewState extends State<MainView> {
   String? senha;
 
   Future<void> _initVariables() async {
-    await Future.delayed(const Duration(seconds: 2));
     UserSQLiteRepository text = UserSQLiteRepository();
     Pessoa pessoa = await text.obterPessoa(widget.emailLogin);
     registros = await RegistroSQLiteRepository().obterDados();
@@ -136,6 +135,7 @@ class _MainViewState extends State<MainView> {
             child: PageView(
           controller: mainCtrl,
           onPageChanged: (value) {
+            _initVariables();
             setState(() {
               pagAtual = value;
             });
