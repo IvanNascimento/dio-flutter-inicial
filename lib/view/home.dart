@@ -2,11 +2,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:inicial/constants/colors.dart';
+import 'package:inicial/models/registro.dart';
+import 'package:inicial/repositories/registros.sqlite.dart';
 import 'package:inicial/services/images.dart';
 
 class Home extends StatefulWidget {
   final String _nome;
-  const Home(this._nome, {super.key});
+  final double altura;
+  final Function update;
+  const Home(this._nome, this.altura, this.update, {super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -18,8 +22,7 @@ class _HomeState extends State<Home> {
   DateTime initDate = DateTime.now();
 
   _init() {
-    DateTime hoje = DateTime.now();
-    dataCtrl.text = "${hoje.day}/${hoje.month}/${hoje.year}";
+    dataCtrl.text = "${initDate.day}/${initDate.month}/${initDate.year}";
   }
 
   @override
@@ -129,7 +132,10 @@ class _HomeState extends State<Home> {
                     onPressed: () {
                       if (pesoCtrl.text != "" && dataCtrl.text != "") {
                         try {
-                          double.parse(pesoCtrl.text);
+                          RegistroSQLiteRepository().salvar(Registro(
+                              double.parse(pesoCtrl.text),
+                              widget.altura,
+                              initDate));
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text("Salvando...")));
                         } on FormatException catch (_) {

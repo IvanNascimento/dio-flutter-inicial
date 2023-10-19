@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:inicial/constants/colors.dart';
+import 'package:inicial/models/pessoa.dart';
+import 'package:inicial/models/registro.dart';
+import 'package:inicial/repositories/registros.sqlite.dart';
+import 'package:inicial/repositories/users.sqlite.dart';
 import 'package:inicial/view/cadastro.dart';
 import 'package:inicial/view/configuracoes.dart';
 import 'package:inicial/view/home.dart';
@@ -8,7 +12,8 @@ import 'package:inicial/view/login.dart';
 import 'package:inicial/view/registros.dart';
 
 class MainView extends StatefulWidget {
-  const MainView({super.key});
+  final String emailLogin;
+  const MainView(this.emailLogin, {super.key});
 
   @override
   State<MainView> createState() => _MainViewState();
@@ -19,19 +24,54 @@ class _MainViewState extends State<MainView> {
   int pagAtual = 0;
 
   String? nome;
+  double? altura;
+  bool temaDark = true;
+
+  List<Registro>? registros;
+
+  String? email;
+  String? senha;
 
   Future<void> _initVariables() async {
     await Future.delayed(const Duration(seconds: 2));
+    UserSQLiteRepository text = UserSQLiteRepository();
+    Pessoa pessoa = await text.obterPessoa(widget.emailLogin);
+    registros = await RegistroSQLiteRepository().obterDados();
     setState(() {
-      nome = "Ivan Nascimento";
+      nome = pessoa.nome;
+      altura = pessoa.altura;
+      email = pessoa.email;
+      senha = pessoa.password;
     });
+  }
+
+  Future<void> updateVariables(
+      {String? nome,
+      double? altura,
+      bool? tema,
+      List<Registro>? registros,
+      String? email}) async {
+    if (nome != null) {
+      this.nome = nome;
+    }
+    if (altura != null) {
+      this.altura = altura;
+    }
+    if (tema != null) {
+      temaDark = tema;
+    }
+    if (registros != null) {
+      this.registros = registros;
+    }
+    if (email != null) {
+      this.email = email;
+    }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     _initVariables();
+    super.initState();
   }
 
   @override
@@ -101,9 +141,10 @@ class _MainViewState extends State<MainView> {
             });
           },
           children: [
-            Home(nome ?? "NomeUsuário"),
-            const Registros(),
-            const Configuracoes(),
+            Home(nome ?? "NomeUsuário", altura ?? 0, updateVariables),
+            Registros(registros ?? []),
+            Configuracoes(nome ?? "NomeUsuário", altura ?? 0,
+                email ?? "email@email.com", updateVariables),
             const Cadastro()
           ],
         )),

@@ -1,6 +1,8 @@
+// ignore_for_file: constant_identifier_names
+
 enum TABLES {
   USERS('users'),
-  IMCS('imcs');
+  REGISTROS('registros');
 
   const TABLES(this.str);
 

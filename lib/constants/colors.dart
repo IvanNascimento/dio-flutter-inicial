@@ -33,3 +33,8 @@ class AppBarColors {
   static Color get defaultColor => Colors.blue[600]!;
   static Color get BottomNavigationBar => Colors.grey[400]!;
 }
+
+class TableColors {
+  static Color get defaultColor => Colors.black;
+  static Color get invertedColor => Colors.white;
+}

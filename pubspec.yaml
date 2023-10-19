@@ -1,10 +1,10 @@
 name: inicial
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.6 <4.0.0'
+  sdk: ">=3.0.6 <4.0.0"
 
 dependencies:
   flutter:
@@ -15,6 +15,7 @@ dependencies:
   sqflite: ^2.3.0
   google_fonts: ^6.1.0
   font_awesome_flutter: ^10.6.0
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:
@@ -26,11 +27,11 @@ flutter:
   uses-material-design: true
   assets:
     - lib/images/capa-eclipses.png
-    - lib/images/pexels-deepak-ramesha-16412532.jpg
-    - lib/images/pexels-drew-rae-580679.jpg
+    # - lib/images/pexels-deepak-ramesha-16412532.jpg
+    # - lib/images/pexels-drew-rae-580679.jpg
     - lib/images/logo.jpg
-    - lib/images/pexels-kush-kaushik-2078126.jpg
-    - lib/images/pexels-melissa-mayes-6707257.jpg
+    # - lib/images/pexels-kush-kaushik-2078126.jpg
+    # - lib/images/pexels-melissa-mayes-6707257.jpg
   # fonts:
   #   - family: Schyler
   #     fonts:

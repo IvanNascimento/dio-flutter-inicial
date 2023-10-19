@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inicial/enums/database_registros.dart';
 import 'package:inicial/enums/database_tables.dart';
 import 'package:inicial/enums/database_users.dart';
 import 'package:sqflite/sqflite.dart';
@@ -15,17 +16,16 @@ Map<int, String> scripts = {
       ${USERS.peso.toString()}, 
       ${USERS.nascimento.toString()}
     );
-    CREATE TABLE ${TABLES.IMCS.str} ( 
-      id INTEGER PRIMARY KEY AUTOINCREMENT, 
-      altura REAL NOT NULL, 
-      peso REAL NOT NULL, 
-      data TEXT NOT NULL, 
-      PessoaId INTEGER NOT NULL, 
-      CONSTRAINT fk_pessoa 
-      FOREIGN KEY (PessoaId) 
-      REFERENCES pessoas(id)
-    );
   ''',
+  1: ''' 
+    CREATE TABLE IF NOT EXISTS ${TABLES.REGISTROS.str} ( 
+      ${REGISTROS.id.toString()}, 
+      ${REGISTROS.peso.toString()}, 
+      ${REGISTROS.altura.toString()}, 
+      ${REGISTROS.data.toString()},
+      ${REGISTROS.PessoaId.toString()}
+    );
+  '''
 };
 
 class SQLiteDataBase {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inicial/constants/colors.dart';
+import 'package:inicial/models/pessoa.dart';
+import 'package:inicial/repositories/last_email.dart';
+import 'package:inicial/repositories/users.sqlite.dart';
 import 'package:inicial/services/images.dart';
 import 'package:inicial/view/main.dart';
 
@@ -11,9 +14,19 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  var emailCtrl = TextEditingController(text: "email@email.com");
-  var senhaCtrl = TextEditingController(text: "123");
+  var emailCtrl = TextEditingController(text: "");
+  var senhaCtrl = TextEditingController(text: "");
   bool showSenha = true;
+
+  Future<void> _init() async {
+    emailCtrl.text = await LastEmail.getLastEmail();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,17 +151,49 @@ class _LoginViewState extends State<LoginView> {
                   child: SizedBox(
                     width: double.infinity,
                     child: TextButton(
-                        onPressed: () {
-                          if (emailCtrl.text.trim() == "email@email.com" &&
-                              senhaCtrl.text.trim() == "123") {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const MainView()));
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Erro ao efetuar o login")));
+                        onPressed: () async {
+                          UserSQLiteRepository repository =
+                              UserSQLiteRepository();
+                          try {
+                            Pessoa user =
+                                await repository.obterPessoa(emailCtrl.text);
+                            if (senhaCtrl.text.trim() == user.password) {
+                              LastEmail.setLastEmail(emailCtrl.text);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => MainView(user.email)));
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text("Erro ao efetuar o login")));
+                            }
+                          } catch (e) {
+                            if (emailCtrl.text == 'email@email.com' &&
+                                senhaCtrl.text == '123') {
+                              repository
+                                  .salvar(Pessoa.db(
+                                      null,
+                                      "email@email.com",
+                                      "123",
+                                      "Usuário",
+                                      60,
+                                      1.65,
+                                      DateTime(1850)))
+                                  .then((value) => {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const MainView(
+                                                        "email@email.com")))
+                                      });
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text("Email não cadastrado")));
+                            }
                           }
                         },
                         style: ButtonStyle(

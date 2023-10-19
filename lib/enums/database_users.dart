@@ -16,4 +16,7 @@ enum USERS {
   String toString() {
     return "$col $attributes";
   }
+
+  static String get colunas =>
+      "${id.col}, ${email.col}, ${senha.col}, ${nome.col}, ${peso.col}, ${altura.col}, ${nascimento.col}";
 }
